@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Conference;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,12 @@ class ConferenceController extends AbstractController
     )]
     public function index(Request $request, string $name = 'Sergii'): Response
     {
+        $con = new Conference();
+        $con->isInternational1 = 23;
+
+        var_dump($con->isInternational1);
+        die;
+
         $greet = '';
 
         if ($name) {
