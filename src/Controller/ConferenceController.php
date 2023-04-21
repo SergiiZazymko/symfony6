@@ -27,6 +27,8 @@ class ConferenceController extends AbstractController
         ConferenceRepository $conferenceRepository
     ): Response {
 
+        return $this->render('conference/bulya.html.twig');
+
         return $this->render('conference/index.html.twig', [
             'conferences' => $conferenceRepository->findAll(),
         ]);
