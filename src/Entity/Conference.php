@@ -56,6 +56,14 @@ class Conference
     }
 
     /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->city . ' ' . $this->year;
+    }
+
+    /**
      * @return int|null
      */
     public function getId(): ?int

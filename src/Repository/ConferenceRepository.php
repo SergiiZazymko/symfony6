@@ -16,11 +16,21 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ConferenceRepository extends ServiceEntityRepository
 {
+    /**
+     * ConferenceRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Conference::class);
     }
 
+    /**
+     * @param Conference $entity
+     * @param bool $flush
+     * @return void
+     */
     public function save(Conference $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -30,6 +40,11 @@ class ConferenceRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param Conference $entity
+     * @param bool $flush
+     * @return void
+     */
     public function remove(Conference $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
@@ -38,29 +53,4 @@ class ConferenceRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
-//    /**
-//     * @return Conference[] Returns an array of Conference objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Conference
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
