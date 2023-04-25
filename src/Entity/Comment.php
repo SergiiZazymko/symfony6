@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Namespace App\Entity
  */
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Comment
 {
     /**
@@ -186,5 +187,15 @@ class Comment
         $this->photoFilename = $photoFilename;
 
         return $this;
+    }
+
+    /**
+     * @return void
+     *
+     */
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTimeImmutable();
     }
 }

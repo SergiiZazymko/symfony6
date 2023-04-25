@@ -15,24 +15,15 @@ use Twig\Environment;
 class TwigEventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var Environment
-     */
-    private Environment $twig;
-    /**
-     * @var ConferenceRepository
-     */
-    private ConferenceRepository $conferenceRepository;
-
-    /**
      * TwigEventSubscriber constructor.
      *
      * @param Environment $twig
      * @param ConferenceRepository $conferenceRepository
      */
-    public function __construct(Environment $twig, ConferenceRepository $conferenceRepository)
-    {
-        $this->twig = $twig;
-        $this->conferenceRepository = $conferenceRepository;
+    public function __construct(
+        private Environment          $twig,
+        private ConferenceRepository $conferenceRepository
+    ) {
     }
 
     /**
