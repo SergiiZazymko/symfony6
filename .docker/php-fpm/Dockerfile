@@ -25,6 +25,9 @@ RUN apt-get update && \
     docker-php-ext-enable apcu pdo_pgsql sodium && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash && \
+    apt install symfony-cli
+
 # install xdebug
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
@@ -36,6 +39,8 @@ RUN echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-
 RUN echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN echo "xdebug.file_link_format = \"phpstorm://open?file=%f&line=%l\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+RUN wget https://get.symfony.com/cli/installer -O - | bash
 
 ENV PHP_IDE_CONFIG 'serverName=DockerApp'
 
