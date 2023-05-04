@@ -15,6 +15,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 class Comment
 {
+    const STATE_SUBMITTED = 'submitted';
+    const STATE_PUBLISHED = 'published';
+    const STATE_SPAM = 'spam';
+
     /**
      * @var int|null
      */
@@ -63,6 +67,12 @@ class Comment
      */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoFilename = null;
+
+    /**
+     * @var string|null
+     */
+    #[ORM\Column(length: 255, options: ['default' => self::STATE_SUBMITTED])]
+    private ?string $state = self::STATE_SUBMITTED;
 
     /**
      * @return string
@@ -202,5 +212,24 @@ class Comment
     public function setCreatedAtValue()
     {
         $this->createdAt = new \DateTimeImmutable();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param string $state
+     * @return $this
+     */
+    public function setState(string $state): self
+    {
+        $this->state = $state;
+
+        return $this;
     }
 }

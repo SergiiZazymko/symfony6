@@ -77,3 +77,23 @@ up: ## Up the project
 	$(info Make: Init the project.)
 	@make -s stop
 	@make -s start
+
+start_worker:
+	$(info Make: Start queue worker.)
+	@docker-compose exec -uroot php-fpm symfony run -d --watch=config,src,templates,vendor symfony console messenger:consume async
+
+show_logs:
+	$(info Make: Show symfony logs.)
+	@docker-compose exec -uroot php-fpm symfony run symfony server:log
+
+server_status:
+	$(info Make: Swow server status (including queues).)
+	@docker-compose exec -uroot php-fpm symfony server:status
+
+show_filed_messages:
+	$(info Make: Swow filed messages.)
+	@docker-compose exec -uroot php-fpm symfony console messenger:failed:show
+
+retry_filed_messages:
+	$(info Make: Retry filed messages.)
+	@docker-compose exec -uroot php-fpm symfony console messenger:failed:retry
