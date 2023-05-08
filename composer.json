@@ -43,7 +43,9 @@
         "symfony/web-link": "6.2.*",
         "symfony/workflow": "6.2.*",
         "symfony/yaml": "6.2.*",
+        "twig/cssinliner-extra": "^3.6",
         "twig/extra-bundle": "^2.12|^3.0",
+        "twig/inky-extra": "^2.1",
         "twig/intl-extra": "^3.5",
         "twig/twig": "^2.12|^3.0"
     },

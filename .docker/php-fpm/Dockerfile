@@ -42,6 +42,12 @@ RUN echo "xdebug.file_link_format = \"phpstorm://open?file=%f&line=%l\"" >> /usr
 
 RUN wget https://get.symfony.com/cli/installer -O - | bash
 
+RUN apt-get update && \
+    apt-get install -y libxslt1-dev && \
+    docker-php-ext-install xsl && \
+    apt-get remove -y libxslt1-dev icu-devtools libicu-dev libxml2-dev && \
+    rm -rf /var/lib/apt/lists/*
+
 ENV PHP_IDE_CONFIG 'serverName=DockerApp'
 
 RUN echo 'alias sf="php bin/console"' >> ~/.bashrc
