@@ -51,7 +51,7 @@ class ConferenceController extends AbstractController
 
         return $this->render('conference/index.html.twig', [
             'conferences' => $conferenceRepository->findAll(),
-        ]);
+        ])->setSharedMaxAge(3600);
     }
 
     /**
