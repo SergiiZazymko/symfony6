@@ -20,6 +20,7 @@ use Twig\Error\SyntaxError;
  * Class AdminController
  * Namespace App\Controller
  */
+#[Route('/admin')]
 class AdminController extends AbstractController
 {
     /**
@@ -45,7 +46,7 @@ class AdminController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    #[Route('/admin/comment/review/{id}', name: 'review_comment')]
+    #[Route('/comment/review/{id}', name: 'review_comment')]
     public function reviewComment(Request $request, Comment $comment, WorkflowInterface $commentStateMachine): Response
     {
         $accepted = !$request->query->get('reject');
