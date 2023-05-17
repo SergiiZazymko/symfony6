@@ -2,9 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -13,6 +19,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'comment:item']),
+        new GetCollection(normalizationContext: ['groups' => 'comment:list']),
+    ],
+    order: ['createdAt' => 'DESC'],
+    paginationEnabled: false,
+)]
+#[ApiFilter(SearchFilter::class, properties: ['conference' => 'exact'])]
 class Comment
 {
     const STATE_SUBMITTED = 'submitted';
@@ -25,6 +40,7 @@ class Comment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['comment:list', 'comment:item'])]
     private ?int $id = null;
 
     /**
@@ -32,6 +48,7 @@ class Comment
      */
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Groups(['comment:list', 'comment:item'])]
     private ?string $author = null;
 
     /**
@@ -39,6 +56,7 @@ class Comment
      */
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
+    #[Groups(['comment:list', 'comment:item'])]
     private ?string $text = null;
 
     /**
@@ -47,12 +65,14 @@ class Comment
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Email]
+    #[Groups(['comment:list', 'comment:item'])]
     private ?string $email = null;
 
     /**
      * @var \DateTimeImmutable|null
      */
     #[ORM\Column]
+    #[Groups(['comment:list', 'comment:item'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     /**
@@ -60,12 +80,14 @@ class Comment
      */
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['comment:list', 'comment:item'])]
     private ?Conference $conference = null;
 
     /**
      * @var string|null
      */
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['comment:list', 'comment:item'])]
     private ?string $photoFilename = null;
 
     /**
