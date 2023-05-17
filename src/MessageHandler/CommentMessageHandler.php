@@ -11,9 +11,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 /**
@@ -33,6 +35,7 @@ class CommentMessageHandler
      * @param WorkflowInterface $commentStateMachine
      * @param MailerInterface $mailer
      * @param string $adminEmail
+     * @param NotifierInterface $notifier
      * @param LoggerInterface|null $logger
      */
     public function __construct(
@@ -43,6 +46,7 @@ class CommentMessageHandler
         private WorkflowInterface                   $commentStateMachine,
         private MailerInterface                     $mailer,
         #[Autowire('%admin_email%')] private string $adminEmail,
+        private NotifierInterface                   $notifier,
         private ?LoggerInterface                    $logger = null,
     ) {
     }
@@ -50,6 +54,7 @@ class CommentMessageHandler
     /**
      * @param CommentMessage $message
      * @return void
+     * @throws TransportExceptionInterface
      */
     public function __invoke(CommentMessage $message)
     {
@@ -64,13 +69,15 @@ class CommentMessageHandler
         //    $comment->setState('published');
         //}
 
-        $this->mailer->send((new NotificationEmail())
-            ->subject('New comment posted')
-            ->htmlTemplate('emails/comment_notification.html.twig')
-            ->from($this->adminEmail)
-            ->to($this->adminEmail)
-            ->context(['comment' => $comment])
-        );
+        //$this->mailer->send((new NotificationEmail())
+        //    ->subject('New comment posted')
+        //    ->htmlTemplate('emails/comment_notification.html.twig')
+        //    ->from($this->adminEmail)
+        //    ->to($this->adminEmail)
+        //    ->context(['comment' => $comment])
+        //);
+
+        $this->notifier->send(new CommentReviewNotification($comment), ...$this->notifier->getAdminRecipients());
 
         if ($this->commentStateMachine->can($comment, 'accept')) {
             $score = $this->spamChecker->getSpamScore($comment, $message->getContext());
